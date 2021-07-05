@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 
 import MyImage from "../images";
+import firebase from "../utils/firebase";
 
 const useStyles = makeStyles((theme) => ({
   parent: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     width: 150,
     marginTop: -170,
   },
-  
+
   spanEmail: {
     color: "#4cb138",
     cursor: "pointer",
@@ -44,12 +45,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const db = firebase.firestore();
+const storage = firebase.storage();
+
 const ProfileHeader = (props) => {
   const classes = useStyles();
 
   const [preview, setPreview] = useState("");
   const [image, setImage] = useState(null);
   const fileInputRef = useRef();
+
+  const [state, setState] = useState(props.profileDetails);
+  const [docId, setDocId] = useState("");
+  const [newUpload, setUpload] = useState(false);
 
   useEffect(() => {
     if (image) {
@@ -63,12 +71,83 @@ const ProfileHeader = (props) => {
     }
   }, [image]);
 
+  useEffect(() => {
+    setState(props.profileDetails);
+  }, [props.profileDetails]);
+
+  useEffect(() => {
+    const currentUser = firebase.auth().currentUser;
+    db.collection("collection_users")
+      .doc(currentUser.uid)
+      .collection("profile")
+      .onSnapshot((doc) => {
+        doc.forEach((c) => {
+          setDocId(c.id);
+        });
+      });
+  }, []);
+
+  const handleChange = (prop) => (text) => {
+    setState({ ...state, [prop]: text.target.value });
+  };
+
   const previewFile = (event) => {
     const file = event.target.files[0];
     if (file) {
       setImage(file);
+      setUpload(true);
     } else {
       setImage(null);
+    }
+  };
+
+  const save = () => {
+    if (newUpload) {
+      const uploadPhoto = storage
+        .ref(`images-profile/${image.name}`)
+        .put(image);
+      uploadPhoto.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          storage
+            .ref("images-profile")
+            .child(image.name)
+            .getDownloadURL()
+            .then((url) => {
+              const currentUser = firebase.auth().currentUser;
+              db.collection("collection_users")
+                .doc(currentUser.uid)
+                .collection("profile")
+                .doc(docId)
+                .set({
+                  user_bio: state.user_bio,
+                  user_email: props.email,
+                  user_location: state.user_location,
+                  user_name: state.user_name,
+                  user_photo: url,
+                });
+              alert("Profile updated successfully");
+            });
+        }
+      );
+    } else {
+      const currentUser = firebase.auth().currentUser;
+      db.collection("collection_users")
+        .doc(currentUser.uid)
+        .collection("profile")
+        .doc(docId)
+        .set({
+          user_bio: state.user_bio,
+          user_email: props.email,
+          user_location: state.user_location,
+          user_name: state.user_name,
+          user_photo: state.user_photo,
+        });
+      alert("Profile updated successfully");
     }
   };
 
@@ -81,7 +160,11 @@ const ProfileHeader = (props) => {
             <Grid item sm={4} style={{ textAlign: "center" }}>
               <Grid item sm={12}>
                 <img
-                  src={preview || MyImage.img_2}
+                  src={
+                    state.user_photo === ""
+                      ? preview || MyImage.img_2
+                      : preview || state.user_photo
+                  }
                   alt=""
                   className={classes.imgRound}
                 />
@@ -111,8 +194,7 @@ const ProfileHeader = (props) => {
             {/* header right */}
             <Grid item sm={8} style={{ paddingTop: 20 }}>
               <p style={{ fontSize: 18, marginBottom: 8 }}>
-                Email :{" "}
-                <span className={classes.spanEmail}>{props.email}</span>
+                Email : <span className={classes.spanEmail}>{props.email}</span>
               </p>
               {/* bio */}
               <TextField
@@ -120,6 +202,8 @@ const ProfileHeader = (props) => {
                 placeholder="Bio"
                 fullWidth
                 size="small"
+                value={state.user_bio}
+                onChange={handleChange("user_bio")}
               />
               {/* name */}
               <TextField
@@ -128,6 +212,8 @@ const ProfileHeader = (props) => {
                 fullWidth
                 size="small"
                 style={{ marginTop: -20 }}
+                value={state.user_name}
+                onChange={handleChange("user_name")}
               />
               {/* location */}
               <TextField
@@ -136,12 +222,15 @@ const ProfileHeader = (props) => {
                 fullWidth
                 size="small"
                 style={{ marginTop: -40 }}
+                value={state.user_location}
+                onChange={handleChange("user_location")}
               />
               <div style={{ textAlign: "right" }}>
                 <Button
                   variant="contained"
                   color="primary"
                   className={classes.btnPrimary}
+                  onClick={save}
                 >
                   Save Changes
                 </Button>

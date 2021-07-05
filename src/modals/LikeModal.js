@@ -32,22 +32,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LikeModal = ({ setOpen }) => {
+const LikeModal = ({ setOpen, likeDetails }) => {
   const classes = useStyles();
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const Likes = () => {
+  const Likes = (props) => {
       return (
         <>
         <Grid container>
           <Grid item sm={3}>
-            <img src={MyImage.img_2} alt="" className={classes.imgProfile} />
+            <img src={props.item.like_photo} alt="" className={classes.imgProfile} />
           </Grid>
           <Grid item sm={8} style={{ marginTop: 10 }}>
-            <p style={{ fontSize: 18 }}>Username</p>
+            <p style={{ fontSize: 18 }}>{props.item.like_username}</p>
           </Grid>
 
           <Grid item sm={1} style={{ marginTop: 10 }}>
@@ -72,8 +72,9 @@ const LikeModal = ({ setOpen }) => {
             className={classes.close}
           />
         </div>
-        <Likes />
-        
+        {likeDetails.map((item, index) => (
+          <Likes key={index} item={item}/>
+        ))}
       </Paper>
     </div>
   );

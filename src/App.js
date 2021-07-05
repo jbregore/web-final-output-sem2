@@ -31,7 +31,7 @@ export default function App() {
       } else {
         setValues({ isAuthenticated: false, isLoading: false });
       }
-      console.log(user);
+      // console.log(user);
     });
   }, []);
 

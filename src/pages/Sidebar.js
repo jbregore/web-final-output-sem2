@@ -17,6 +17,7 @@ const Sidebar = () => {
       })
       .catch((err) => {
         //error
+        console.log(err);
       });
   };
 
@@ -44,10 +45,10 @@ const Sidebar = () => {
               );
             })}
             <li className="nav-text">
-              <a style={{cursor: "pointer"}}>
+              <div  className="nav-text2">
                 <AiIcons.AiOutlineLogout />
                 <span style={{ color: "#fff"}}onClick={logout}>Logout</span>
-              </a>
+              </div>
             </li>
           </ul>
         </nav>

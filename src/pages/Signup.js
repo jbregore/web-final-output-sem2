@@ -1,5 +1,12 @@
 import React from "react";
-import { Grid, TextField, Button, Card, CardContent, makeStyles } from "@material-ui/core";
+import {
+  Grid,
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  makeStyles,
+} from "@material-ui/core";
 
 import MyImage from "../images";
 
@@ -8,26 +15,41 @@ import { Link } from "react-router-dom";
 import firebase from "../utils/firebase";
 
 const useStyles = makeStyles((theme) => ({
-    col_2:{
-        [theme.breakpoints.down("xs")] : {
-            textAlign: "center"
-        }
+  col_2: {
+    [theme.breakpoints.down("xs")]: {
+      textAlign: "center",
     },
-    img_1:{
-        width: 200,
-        [theme.breakpoints.down("xs")] : {
-            marginTop: 20,
-            width: 160,
-        }
+  },
+  img_1: {
+    width: 200,
+    [theme.breakpoints.down("xs")]: {
+      marginTop: 20,
+      width: 160,
     },
-    img_2:{
-        width: 500,
-        [theme.breakpoints.down("xs")] : {
-            width: 280,
-        }
-    }
-}))
+  },
+  img_2: {
+    width: 500,
+    [theme.breakpoints.down("xs")]: {
+      width: 280,
+    },
+  },
+  btnPrimary: {
+    height: 50,
+    backgroundColor: "#4cb138",
+    textTransform: "none",
+    fontSize: 18,
+  },
+  btnSecondary: {
+    height: 50,
+    backgroundColor: "#776d6d",
+    textTransform: "none",
+    fontSize: 18,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+}));
 
+const db = firebase.firestore();
 const Signup = () => {
   const classes = useStyles();
 
@@ -35,28 +57,49 @@ const Signup = () => {
     username: "",
     password: "",
     confPassword: "",
-  })
+  });
 
-  const handleChange = (prop) => (text) =>{
-    setPayload({...payload, [prop]: text.target.value})
-  }
+  const handleChange = (prop) => (text) => {
+    setPayload({ ...payload, [prop]: text.target.value });
+  };
 
-  const signup = (e) =>{
+  const signup = (e) => {
     e.preventDefault();
-    if(!payload.username || !payload.password || !payload.confPassword){
-      alert("Please fill all the fields" );
-    } else if (payload.password !== payload.confPassword){
+    if (!payload.username || !payload.password || !payload.confPassword) {
+      alert("Please fill all the fields");
+    } else if (payload.password !== payload.confPassword) {
       alert("Password not match");
-    }else {
-      firebase.auth().createUserWithEmailAndPassword(payload.username, payload.password)
-      .then((userCredential) => {
-        alert("Sign up successful");
-      })
-      .catch((error) => {
-        alert(error);
-      });
+    } else {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(payload.username, payload.password)
+        .then((userCredential) => {
+          const currentUser = firebase.auth().currentUser;
+
+          db.collection("collection_users")
+            .doc(currentUser.uid)
+            .collection("profile")
+            .add({
+              user_bio: "",
+              user_email: currentUser.email,
+              user_location: "",
+              user_name: currentUser.email,
+              user_photo: "",
+            })
+            .then((docRef) => {
+              //success
+            })
+            .catch((error) => {
+              //error
+            });
+
+          alert("Sign up successful");
+        })
+        .catch((error) => {
+          alert(error);
+        });
     }
-  }
+  };
 
   return (
     <Grid
@@ -72,20 +115,19 @@ const Signup = () => {
         xs={10}
         lg={5}
         style={{
-        //   width: "40%",
           height: 600,
         }}
         className={classes.col_2}
       >
         <Grid container direction="column">
           <Grid item>
-            <img src={MyImage.img_1} className={classes.img_1} alt=""/>
+            <img src={MyImage.img_1} className={classes.img_1} alt="" />
           </Grid>
 
           <Grid item>
-            <img src={MyImage.img_3} className={classes.img_2} alt=""/>
+            <img src={MyImage.img_3} className={classes.img_2} alt="" />
             <h2 style={{ color: "#555", fontWeight: 500 }}>
-            Mindfullness social media app
+              Mindfullness social media app
             </h2>
             <p style={{ color: "#555" }}>
               Web app that will help the user be more aware to themselves, and
@@ -96,16 +138,20 @@ const Signup = () => {
         </Grid>
       </Grid>
 
-      <Grid item 
-      xs={10}
-      lg={5}
-      style={{
-        //    width: "40%",
-       height: 400 }}>
+      <Grid
+        item
+        xs={10}
+        lg={5}
+        style={{
+          height: 400,
+        }}
+      >
         <Card style={{ padding: 15, borderRadius: 20 }}>
           <CardContent>
             <Grid item>
-              <h2 style={{color: "#555", fontWeight: 500}}>Sign Up</h2>
+              <h2 style={{ color: "#555", fontWeight: 500, marginBottom: 15 }}>
+                Sign Up
+              </h2>
             </Grid>
 
             <Grid item>
@@ -148,39 +194,25 @@ const Signup = () => {
                 variant="contained"
                 color="primary"
                 fullWidth
-                style={{
-                  height: 50,
-                  backgroundColor: "#4cb138",
-                  textTransform: "none",
-                  fontSize: 18,
-                }}
+                className={classes.btnPrimary}
                 onClick={signup}
               >
                 Sign up
               </Button>
               <br />
 
-                <Link to="/login" style={{textDecoration: "none"}}> 
+              <Link to="/login" style={{ textDecoration: "none" }}>
                 <Button
                   variant="contained"
                   color="primary"
                   fullWidth
-                  style={{
-                    height: 50,
-                    backgroundColor: "#776d6d",
-                    textTransform: "none",
-                    fontSize: 18,
-                    marginTop: 10,
-                    marginBottom: 10
-                  }}
+                  className={classes.btnSecondary}
                 >
                   Back to Log in
                 </Button>
-                </Link>
+              </Link>
 
               <hr />
-                 
-
             </Grid>
           </CardContent>
         </Card>

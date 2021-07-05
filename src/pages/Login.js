@@ -32,6 +32,26 @@ const useStyles = makeStyles((theme) => ({
       width: 280,
     },
   },
+  btnSecondary: {
+    height: 50,
+    backgroundColor: "#776d6d",
+    textTransform: "none",
+    fontSize: 18,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  forgotPassword: {
+    textAlign: "center",
+    color: "#1877f2",
+    textDecoration: "underline",
+    cursor: "pointer",
+  },
+  btnPrimary: {
+    height: 50,
+    backgroundColor: "#4cb138",
+    textTransform: "none",
+    fontSize: 18,
+  },
 }));
 
 const Login = () => {
@@ -72,6 +92,7 @@ const Login = () => {
       justify="center"
       style={{ minHeight: "100vh", backgroundColor: "#f0f2f5" }}
     >
+      {/* left content */}
       <Grid
         item
         xs={10}
@@ -83,11 +104,11 @@ const Login = () => {
       >
         <Grid container direction="column">
           <Grid item>
-            <img src={MyImage.img_1} className={classes.img_1}  alt=""/>
+            <img src={MyImage.img_1} className={classes.img_1} alt="" />
           </Grid>
 
           <Grid item>
-            <img src={MyImage.img_2} className={classes.img_2}  alt=""/>
+            <img src={MyImage.img_2} className={classes.img_2} alt="" />
             <h2 style={{ color: "#555", fontWeight: 500 }}>
               Mindfullness social media app
             </h2>
@@ -100,6 +121,7 @@ const Login = () => {
         </Grid>
       </Grid>
 
+      {/* right content */}
       <Grid
         item
         xs={10}
@@ -111,7 +133,7 @@ const Login = () => {
         <Card style={{ padding: 15, borderRadius: 20 }}>
           <CardContent>
             <Grid item>
-              <h2 style={{ color: "#555", fontWeight: 500 }}>
+              <h2 style={{ color: "#555", fontWeight: 500, marginBottom: 15 }}>
                 Login to your account
               </h2>
             </Grid>
@@ -143,12 +165,7 @@ const Login = () => {
                 variant="contained"
                 color="primary"
                 fullWidth
-                style={{
-                  height: 50,
-                  backgroundColor: "#4cb138",
-                  textTransform: "none",
-                  fontSize: 18,
-                }}
+                className={classes.btnPrimary}
                 onClick={login}
               >
                 Log in
@@ -160,14 +177,7 @@ const Login = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
-                  style={{
-                    height: 50,
-                    backgroundColor: "#776d6d",
-                    textTransform: "none",
-                    fontSize: 18,
-                    marginTop: 10,
-                    marginBottom: 10,
-                  }}
+                  className={classes.btnSecondary}
                 >
                   Create new account
                 </Button>
@@ -175,16 +185,7 @@ const Login = () => {
 
               <hr />
 
-              <p
-                style={{
-                  textAlign: "center",
-                  color: "#1877f2",
-                  textDecoration: "underline",
-                  cursor: "pointer",
-                }}
-              >
-                Forgot password ?
-              </p>
+              <p className={classes.forgotPassword}>Forgot password ?</p>
             </Grid>
           </CardContent>
         </Card>
