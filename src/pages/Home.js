@@ -49,10 +49,13 @@ const Home = () => {
       <div className="home">
         <Grid
           container
+          item
           // direction="row"
           // alignItems="center"
           // justify="center"
-          style={{ width: "70%" }}
+          // style={{ width: "70%" }}
+          xs={11}
+          lg={8}
         >
           <Grid item >
             {postData.map((item, key) => (

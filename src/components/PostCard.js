@@ -22,8 +22,17 @@ const useStyles = makeStyles((theme) => ({
   postHeaderLeft: {
     paddingLeft: 20,
     paddingRight: 20,
-    height: 80,
+    [theme.breakpoints.down("xs")]: {
+      height: "100%",
+    },
   },
+
+  postCardContent: {
+    [theme.breakpoints.down("xs")]: {
+      height: "100%",
+    },
+  },
+
   imgProfile: {
     width: 60,
     height: 60,
@@ -39,6 +48,8 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
     objectFit: "contain",
+    overflow: "hidden",
+    backgroundAttachment: "fixed",
   },
   likes: {
     marginLeft: 4,
@@ -192,7 +203,6 @@ const PostCard = (props) => {
               }
             }
             // console.log(res);
-            console.log("gago");
             setLikeDetails(res);
           });
       });
@@ -203,6 +213,7 @@ const PostCard = (props) => {
   const unlike = (user_id) => {
     // e.preventDefault();
     // console.log(props.item.id);
+    const currentUser = firebase.auth().currentUser;
     db.collection("collection_users").onSnapshot((doc) => {
       doc.forEach((user) => {
         // console.log(user.id);
@@ -215,24 +226,26 @@ const PostCard = (props) => {
           .then((doc) => {
             doc.forEach((c) => {
               // console.log(c.data());
-              // console.log(c.id);
-              db.collection("collection_users")
-                .doc(user.id)
-                .collection("posts")
-                .doc(props.item.id)
-                .collection("likes")
-                .doc(c.id)
-                .delete()
-                .then(() => {
-                  //success
-                  setLike(false);
-                  setLikeDetails([]);
-                  alert("Unlike");
-                })
-                .catch((error) => {
-                  //error
-                });
-              // return;
+              if (currentUser.uid === c.data().like_id) {
+                // console.log(c.id);
+                db.collection("collection_users")
+                  .doc(user.id)
+                  .collection("posts")
+                  .doc(props.item.id)
+                  .collection("likes")
+                  .doc(c.id)
+                  .delete()
+                  .then(() => {
+                    //success
+                    setLike(false);
+                    setLikeDetails([]);
+                    alert("Unlike");
+                  })
+                  .catch((error) => {
+                    //error
+                  });
+                // return;
+              }
             });
           });
       });
@@ -276,8 +289,7 @@ const PostCard = (props) => {
             let foundContents = commentDetails || [];
             doc.forEach((c) => {
               foundContents.push({ ...c.data(), id: c.id });
-              console.log(c.data());
-              
+              // console.log(c.data());
             });
             let check = {};
             let res = [];
@@ -288,8 +300,8 @@ const PostCard = (props) => {
               }
             }
             setCommentDetails(res);
-              setComment("1");
-              console.log(comment);
+            setComment("1");
+            // console.log(comment);
           });
       });
     });
@@ -299,45 +311,45 @@ const PostCard = (props) => {
     // alert(postId);
     const currentUser = firebase.auth().currentUser;
     // alert(currentUser.uid);
-    db.collection("collection_users").onSnapshot((doc => {
+    db.collection("collection_users").onSnapshot((doc) => {
       doc.forEach((user) => {
-        if(user.id === postuser_id){
+        if (user.id === postuser_id) {
           db.collection("collection_users")
-          .doc(user.id)
-          .collection("posts")
-          .doc(postId)
-          .collection("comments")
-          .add({
-            comment_id : currentUser.uid,
-            comment_photo : profilePicture === "" ? MyImage.img_2 : profilePicture,
-            comment_text : commentText,
-            comment_username: profileUsername
-          })
-          .then((docRef) => {
-            //success
-            alert("Comment done.");
-            setCommentText("");
-          })
-          .catch((err) => {
-            //error
-          });
+            .doc(user.id)
+            .collection("posts")
+            .doc(postId)
+            .collection("comments")
+            .add({
+              comment_id: currentUser.uid,
+              comment_photo:
+                profilePicture === "" ? MyImage.img_2 : profilePicture,
+              comment_text: commentText,
+              comment_username: profileUsername,
+            })
+            .then((docRef) => {
+              //success
+              alert("Comment done.");
+              setCommentText("");
+            })
+            .catch((err) => {
+              //error
+            });
         }
       });
-    }));
-
+    });
   };
 
   return (
     <>
       {/* posts */}
       <Card variant="elevation" style={{ marginTop: 20 }}>
-        <CardContent>
+        <CardContent className={classes.postCardContent}>
           <Grid
             container
-            style={{ height: props.item.post_picture === "" ? 150 : 650 }}
+            style={{ height: props.item.post_picture === "" ? "auto" : 650 }}
           >
             <Grid container item className={classes.postHeaderLeft}>
-              <Grid item sm={2} style={{ paddingTop: 10 }}>
+              <Grid item sm={2} xs={4} style={{ paddingTop: 10 }}>
                 <img
                   src={
                     props.item.postuser_picture === ""
@@ -348,12 +360,22 @@ const PostCard = (props) => {
                   className={classes.imgProfile}
                 />
               </Grid>
-              <Grid item sm={9} style={{ paddingTop: 15, marginLeft: -40 }}>
+              <Grid
+                item
+                sm={9}
+                xs={7}
+                style={{ paddingTop: 15, marginLeft: -40 }}
+              >
                 <p style={{ fontSize: 18 }}>{props.item.post_username}</p>
                 <p style={{ fontSize: 14 }}>{props.item.post_date}</p>
               </Grid>
 
-              <Grid item sm={1} style={{ marginTop: -10, marginLeft: 40 }}>
+              <Grid
+                item
+                sm={1}
+                xs={1}
+                style={{ marginTop: -10, marginLeft: 40 }}
+              >
                 {props.home === "yes" ? null : (
                   <>
                     {" "}
@@ -367,7 +389,7 @@ const PostCard = (props) => {
                 )}
               </Grid>
 
-              <Grid item sm={12} style={{ marginBottom: 15 }}>
+              <Grid item sm={12} xs={12} style={{ marginBottom: 15 }}>
                 <p style={{ fontSize: 18 }}>{props.item.post_text}</p>
               </Grid>
 
@@ -383,7 +405,7 @@ const PostCard = (props) => {
                 </>
               )}
 
-              <Grid item sm={2} style={{ paddingTop: 15 }}>
+              <Grid item sm={2} xs={6} style={{ paddingTop: 15 }}>
                 <p style={{ fontSize: 16 }}>
                   {/* dine na  */}
 
@@ -420,7 +442,12 @@ const PostCard = (props) => {
                   </span>
                 </p>
               </Grid>
-              <Grid item sm={9} style={{ paddingTop: 15, marginLeft: -20 }}>
+              <Grid
+                item
+                sm={9}
+                xs={6}
+                style={{ paddingTop: 15, marginLeft: -20 }}
+              >
                 <p style={{ fontSize: 16 }}>
                   <FaIcons.FaRegCommentDots
                     size={24}
@@ -432,7 +459,7 @@ const PostCard = (props) => {
                     onClick={() => {
                       if (comment === "1") {
                         setComment("0");
-                        console.log(comment);
+                        // console.log(comment);
                         // setCommentDetails([]);
                         setCommentDetails([]);
                       } else {
@@ -475,6 +502,7 @@ const PostCard = (props) => {
                     <Grid
                       item
                       sm={12}
+                      xs={12}
                       style={{
                         marginTop: -20,
                         paddingLeft: 50,
@@ -499,20 +527,20 @@ const PostCard = (props) => {
 
               {/* my comment */}
               <Grid container style={{ marginTop: 10 }}>
-                <Grid item>
+                <Grid item xs={3}>
                   <img
                     src={profilePicture === "" ? MyImage.img_2 : profilePicture}
                     alt=""
                     className={classes.commentImgProfile}
                   />
                 </Grid>
-                <Grid sm={8} item style={{ marginLeft: 10, marginTop: 10 }}>
+                <Grid sm={8} xs={8} item style={{ marginLeft: 10, marginTop: 10 }}>
                   <TextField
                     variant="outlined"
                     placeholder="Write a comment"
                     fullWidth
                     size="small"
-                    onChange={event => setCommentText(event.target.value)}
+                    onChange={(event) => setCommentText(event.target.value)}
                     value={commentText}
                   />
                 </Grid>
@@ -521,7 +549,9 @@ const PostCard = (props) => {
                     variant="contained"
                     color="primary"
                     className={classes.commentBtn}
-                    onClick={() => goComment(props.item.id, props.item.postuser_id)}
+                    onClick={() =>
+                      goComment(props.item.id, props.item.postuser_id)
+                    }
                   >
                     Comment
                   </Button>

@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
-import { Grid } from "@material-ui/core";
+import { Grid, makeStyles } from "@material-ui/core";
 
 import ProfileHeader from "../components/ProfileHeader";
 import PostCard from "../components/PostCard";
 
 import firebase from "../utils/firebase";
 
+
+const useStyles = makeStyles((theme) => ({
+  
+}));
+
 const db = firebase.firestore();
 const Profile = () => {
+  const classes = useStyles();
   const [email, setEmail] = useState("");
 
   const [profileDetails, setProfileDetails] = useState({
@@ -58,15 +64,18 @@ const Profile = () => {
 
   return (
     <div style={{ backgroundColor: "#f0f2f5", paddingBottom: 150 }}>
-      <Sidebar />
+      <Sidebar/>
 
       <div className="profile">
         <Grid
           container
+          item
           // direction="row"
           // alignItems="center"
           // justify="center"
-          style={{ width: "70%" }}
+          // style={{ width: "70%" }}
+          xs={11}
+          lg={8}
         >
           <Grid item>
             {/* profile header */}

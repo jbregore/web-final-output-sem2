@@ -14,6 +14,12 @@ import firebase from "../utils/firebase";
 
 const useStyles = makeStyles((theme) => ({
   // post
+  mainCont: {
+    height: 720,
+    [theme.breakpoints.down("xs")]: {
+      height: "100%"
+    },
+  },
   imgProfile: {
     width: 60,
     height: 60,
@@ -37,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
     fontSize: 14,
     width: 90,
+    [theme.breakpoints.down("xs")]: {
+      width: "30%",
+      height: 40,
+    },
   },
   btnPrimary: {
     marginTop: -25,
@@ -45,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
     fontSize: 14,
     width: 90,
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      height: 50,
+    },
   },
 }));
 
@@ -199,22 +213,25 @@ const Post = () => {
       <div className="post">
         <Grid
           container
+          item
           // direction="row"
           // alignItems="center"
           // justify="center"
           style={{ width: "70%" }}
+          xs={11}
+          lg={8}
         >
-          <Grid item>
+          <Grid item >
             {/* posts */}
             <Card variant="elevation" style={{ marginTop: 20 }}>
               <CardContent>
-                <Grid container style={{ height: 720 }}>
+                <Grid container className={classes.mainCont}>
                   <Grid
                     container
                     item
-                    style={{ paddingLeft: 20, paddingRight: 20, height: 80 }}
+                    // style={{ paddingLeft: 20, paddingRight: 20, height: 80 }}
                   >
-                    <Grid item sm={2} style={{ paddingTop: 10 }}>
+                    <Grid item sm={2} xs={4} style={{ paddingTop: 10 }}>
                       <img
                         src={photoProfile === "" ? MyImage.img_2 : photoProfile}
                         alt=""
@@ -225,12 +242,14 @@ const Post = () => {
                       item
                       sm={9}
                       style={{ paddingTop: 15, marginLeft: -40 }}
+                      xs={6}
+
                     >
                       <p style={{ fontSize: 18 }}>{userName}</p>
                       <p style={{ fontSize: 14 }}>{date}</p>
                     </Grid>
 
-                    <Grid item sm={12} style={{ marginBottom: 15 }}>
+                    <Grid item sm={12} style={{ marginBottom: 15, width: "100%" }}>
                       <TextField
                         variant="outlined"
                         placeholder="Write a post"
@@ -253,7 +272,7 @@ const Post = () => {
                     </Grid>
 
                     <Grid container spacing={6}>
-                      <Grid item sm={3}>
+                      <Grid item sm={3} xs={12}>
                         <Button
                           variant="contained"
                           color="primary"
@@ -281,7 +300,7 @@ const Post = () => {
                           }}
                         />
                       </Grid>
-                      <Grid item sm={9}>
+                      <Grid item sm={9} xs={12}>
                         <div style={{ textAlign: "right" }}>
                           <Button
                             variant="contained"

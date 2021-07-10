@@ -15,6 +15,17 @@ import { Link } from "react-router-dom";
 import firebase from "../utils/firebase";
 
 const useStyles = makeStyles((theme) => ({
+  gridCont : {
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column-reverse"
+    },
+  },
+  card : {
+    width: 400,
+    [theme.breakpoints.down("xs")]: {
+      marginTop: 40
+    },
+  },
   col_2: {
     [theme.breakpoints.down("xs")]: {
       textAlign: "center",
@@ -75,6 +86,17 @@ const Signup = () => {
         .createUserWithEmailAndPassword(payload.username, payload.password)
         .then((userCredential) => {
           const currentUser = firebase.auth().currentUser;
+          db.collection("collection_users")
+            .doc(currentUser.uid)
+            .set({
+              mema: "",
+            })
+            .then((docRef) => {
+              //success
+            })
+            .catch((error) => {
+              //error
+            });
 
           db.collection("collection_users")
             .doc(currentUser.uid)
@@ -109,6 +131,7 @@ const Signup = () => {
       alignItems="center"
       justify="center"
       style={{ minHeight: "100vh", backgroundColor: "#f0f2f5" }}
+      className={classes.gridCont}
     >
       <Grid
         item
@@ -145,6 +168,7 @@ const Signup = () => {
         style={{
           height: 400,
         }}
+        className={classes.card}
       >
         <Card style={{ padding: 15, borderRadius: 20 }}>
           <CardContent>

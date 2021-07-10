@@ -43,14 +43,14 @@ const LikeModal = ({ setOpen, likeDetails }) => {
       return (
         <>
         <Grid container>
-          <Grid item sm={3}>
+          <Grid item sm={3} xs={2}>
             <img src={props.item.like_photo} alt="" className={classes.imgProfile} />
           </Grid>
-          <Grid item sm={8} style={{ marginTop: 10 }}>
+          <Grid item sm={8} xs={8} style={{ marginTop: 10 }}>
             <p style={{ fontSize: 18 }}>{props.item.like_username}</p>
           </Grid>
 
-          <Grid item sm={1} style={{ marginTop: 10 }}>
+          <Grid item sm={1} xs={2} style={{ marginTop: 10 }}>
             <AiIcons.AiFillHeart
               size={32}
               color="#4cb138"

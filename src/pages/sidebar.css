@@ -1,10 +1,17 @@
 .navbar {
   background-color: #555;
-  height: 20px;
+  height: 60px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 60px;
+}
+
+.menu-bar {
+  margin-left: 4rem;
+  font-size: 3rem;
+  background: none;
+  color: "#fff"
 }
 
 .menu-bars {
@@ -14,6 +21,7 @@
 }
 
 .nav-menu {
+  z-index: 1;
   background-color: #555;
   opacity: 1;
   width: 250px;
@@ -69,8 +77,21 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  font-size: 40px;
+  color: #fff;
+  font-weight: 300;
 }
 
 .nav-menu-items span {
   margin-left: 16px;
+}
+
+@media only screen and (max-width: 600px){
+	*{
+		overflow-x: hidden;
+	}
+	.nav-menu {
+    background-color: #555;
+    width: 0;
+  }
 }

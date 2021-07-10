@@ -14,12 +14,20 @@ import firebase from "../utils/firebase";
 const useStyles = makeStyles((theme) => ({
   parent: {
     height: 250,
+    [theme.breakpoints.down("xs")]: {
+      height: "100%"
+    },
   },
   imgRound: {
     width: 140,
     height: 140,
     borderRadius: "50%",
     border: "5px solid #4cb138",
+    [theme.breakpoints.down("xs")]: {
+      width: 100,
+      height: 100,
+      border: "2px solid #4cb138",
+    },
   },
   btnSecondary: {
     marginTop: -25,
@@ -36,6 +44,11 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 14,
     width: 150,
     marginTop: -170,
+    [theme.breakpoints.down("xs")]: {
+      height: 40,
+      marginTop: -30,
+      width: "100%"
+    },
   },
 
   spanEmail: {
@@ -43,6 +56,20 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     textDecoration: "underline",
   },
+
+  saveContainer: {
+    [theme.breakpoints.down("xs")]: {
+      marginTop: -60
+    },
+  },
+
+  hrBotProf : {
+    marginTop: 10,
+    // [theme.breakpoints.down("xs")]: {
+    //   marginTop: -110
+    // },
+  }
+
 }));
 
 const db = firebase.firestore();
@@ -157,7 +184,7 @@ const ProfileHeader = (props) => {
         <CardContent>
           <Grid container className={classes.parent}>
             {/* header left */}
-            <Grid item sm={4} style={{ textAlign: "center" }}>
+            <Grid item sm={4} xs={12} style={{ textAlign: "center", alignItems: "center" }}>
               <Grid item sm={12}>
                 <img
                   src={
@@ -225,7 +252,7 @@ const ProfileHeader = (props) => {
                 value={state.user_location}
                 onChange={handleChange("user_location")}
               />
-              <div style={{ textAlign: "right" }}>
+              <div xs={12} style={{textAlign: "right"}} className={classes.saveContainer}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -237,7 +264,8 @@ const ProfileHeader = (props) => {
               </div>
             </Grid>
           </Grid>
-          <hr style={{ marginTop: 10 }} />
+          <hr className={classes.hrBotProf} /> 
+          {/* marginTop: -100 */}
         </CardContent>
       </Card>
     </>
