@@ -63,7 +63,7 @@ const Profile = () => {
 
 
   return (
-    <div style={{ backgroundColor: "#f0f2f5", paddingBottom: 150 }}>
+    <div style={{ backgroundColor: "#f0f2f5", paddingBottom: 150, minHeight: '100vh' }}>
       <Sidebar/>
 
       <div className="profile">

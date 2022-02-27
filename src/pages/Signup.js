@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   img_1: {
     width: 200,
+    objectFit: "cover",
     [theme.breakpoints.down("xs")]: {
       marginTop: 20,
       width: 160,
@@ -40,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   img_2: {
     width: 500,
+    objectFit: "cover",
     [theme.breakpoints.down("xs")]: {
       width: 280,
     },
@@ -151,7 +153,7 @@ const Signup = () => {
             <img src={MyImage.img_3} className={classes.img_2} alt="" />
             <h2 style={{ color: "#555", fontWeight: 500 }}>
               Mindfullness social media app
-            </h2>
+            </h2><br />
             <p style={{ color: "#555" }}>
               Web app that will help the user be more aware to themselves, and
               allows user to be positive all the time through, instilling a

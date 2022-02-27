@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     height: 50,
     borderRadius: "50%",
     border: "5px solid #4cb138",
+    objectFit: 'cover'
   },
 }));
 

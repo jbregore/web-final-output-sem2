@@ -15,26 +15,35 @@ import firebase from "../utils/firebase";
 const useStyles = makeStyles((theme) => ({
   // post
   mainCont: {
-    height: 720,
+    overflow: 'hidden',
     [theme.breakpoints.down("xs")]: {
-      height: "100%"
+      // height: "100%"
+      overflow: 'hidden',
     },
   },
   imgProfile: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: "50%",
-    border: "5px solid #4cb138",
+    border: "3px solid #4cb138",
+    objectFit: "cover",
+    [theme.breakpoints.down("xs")]: {
+      width: 40,
+      height: 40,
+    },
   },
   imgBox: {
     border: "1px solid rgb(214, 214, 214)",
     borderRadius: 10,
     height: 450,
+    [theme.breakpoints.down("xs")]: {
+      height: 350,
+    },
   },
   img: {
     width: "100%",
     height: "100%",
-    objectFit: "contain",
+    objectFit: "cover",
   },
   btnSecondary: {
     marginTop: -25,
@@ -208,7 +217,7 @@ const Post = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "#f0f2f5", paddingBottom: 150 }}>
+    <div style={{ backgroundColor: "#f0f2f5", paddingBottom: 150, minHeight: '100vh' }}>
       <Sidebar />
       <div className="post">
         <Grid
@@ -224,8 +233,8 @@ const Post = () => {
           <Grid item >
             {/* posts */}
             <Card variant="elevation" style={{ marginTop: 20 }}>
-              <CardContent>
-                <Grid container className={classes.mainCont}>
+              <CardContent className={classes.mainCont}>
+                <Grid container >
                   <Grid
                     container
                     item

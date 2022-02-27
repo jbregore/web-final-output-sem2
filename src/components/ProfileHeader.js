@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     height: 140,
     borderRadius: "50%",
     border: "5px solid #4cb138",
+    objectFit: "cover",
     [theme.breakpoints.down("xs")]: {
       width: 100,
       height: 100,
@@ -58,8 +59,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   saveContainer: {
+    marginTop: 70,
     [theme.breakpoints.down("xs")]: {
-      marginTop: -60
+      marginTop: -5
     },
   },
 
@@ -238,7 +240,7 @@ const ProfileHeader = (props) => {
                 placeholder="Username"
                 fullWidth
                 size="small"
-                style={{ marginTop: -20 }}
+                style={{  }}
                 value={state.user_name}
                 onChange={handleChange("user_name")}
               />
@@ -248,10 +250,11 @@ const ProfileHeader = (props) => {
                 placeholder="Location"
                 fullWidth
                 size="small"
-                style={{ marginTop: -40 }}
+                style={{  }}
                 value={state.user_location}
                 onChange={handleChange("user_location")}
               />
+
               <div xs={12} style={{textAlign: "right"}} className={classes.saveContainer}>
                 <Button
                   variant="contained"

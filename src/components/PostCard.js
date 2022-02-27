@@ -24,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 20,
     [theme.breakpoints.down("xs")]: {
       height: "100%",
+      paddingLeft: 0,
+      paddingRight: 0,
     },
   },
 
@@ -34,20 +36,30 @@ const useStyles = makeStyles((theme) => ({
   },
 
   imgProfile: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: "50%",
-    border: "5px solid #4cb138",
+    border: "3px solid #4cb138",
+    objectFit: "cover",
+    [theme.breakpoints.down("xs")]: {
+      width: 40,
+      height: 40,
+    },
   },
   imgBox: {
-    border: "1px solid rgb(214, 214, 214)",
-    borderRadius: 10,
+    // border: "1px solid rgb(214, 214, 214)",
     height: 450,
+    borderRadius: 10,
+    overflow: "hidden",
+    [theme.breakpoints.down("xs")]: {
+      height: 350,
+      marginLeft: 15,
+    },
   },
   imgPost: {
     width: "100%",
     height: "100%",
-    objectFit: "contain",
+    objectFit: "cover",
     overflow: "hidden",
     backgroundAttachment: "fixed",
   },
@@ -69,20 +81,33 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#dce2db",
     paddingLeft: 40,
     paddingRight: 40,
+    [theme.breakpoints.down("xs")]: {
+      paddingLeft: 0,
+      paddingRight: 0,
+    },
   },
   commentImgProfile: {
     width: 50,
     height: 50,
     borderRadius: "50%",
-    border: "5px solid #4cb138",
+    border: "3px solid #4cb138",
+    objectFit: "cover",
+    [theme.breakpoints.down("xs")]: {
+      width: 40,
+      height: 40,
+    },
   },
   commentBtn: {
-    marginTop: -40,
+    marginTop: -27,
     height: 40,
     backgroundColor: "#4cb138",
     textTransform: "none",
     fontSize: 16,
-    width: 120,
+    width: 100,
+    marginLeft: 5,
+    [theme.breakpoints.down("xs")]: {
+      width: '100%',
+    },
   },
 
   // modal
@@ -99,6 +124,11 @@ const useStyles = makeStyles((theme) => ({
     height: 600,
     overflow: "auto",
   },
+  margin1: {
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: 10
+    },
+  }
 }));
 
 const db = firebase.firestore();
@@ -346,7 +376,9 @@ const PostCard = (props) => {
         <CardContent className={classes.postCardContent}>
           <Grid
             container
-            style={{ height: props.item.post_picture === "" ? "auto" : 650 }}
+            style={{
+              height: props.item.post_picture === "" ? "auto" : 650, overflow: "hidden",
+               }}
           >
             <Grid container item className={classes.postHeaderLeft}>
               <Grid item sm={2} xs={4} style={{ paddingTop: 10 }}>
@@ -363,10 +395,10 @@ const PostCard = (props) => {
               <Grid
                 item
                 sm={9}
-                xs={7}
-                style={{ paddingTop: 15, marginLeft: -40 }}
+                xs={8}
+                style={{ paddingTop: 20, marginLeft: -40 }}
               >
-                <p style={{ fontSize: 18 }}>{props.item.post_username}</p>
+                <p style={{ fontSize: 16, fontWeight: 'bold' }}>{props.item.post_username}</p>
                 <p style={{ fontSize: 14 }}>{props.item.post_date}</p>
               </Grid>
 
@@ -374,7 +406,7 @@ const PostCard = (props) => {
                 item
                 sm={1}
                 xs={1}
-                style={{ marginTop: -10, marginLeft: 40 }}
+                style={{}}
               >
                 {props.home === "yes" ? null : (
                   <>
@@ -389,8 +421,9 @@ const PostCard = (props) => {
                 )}
               </Grid>
 
-              <Grid item sm={12} xs={12} style={{ marginBottom: 15 }}>
-                <p style={{ fontSize: 18 }}>{props.item.post_text}</p>
+              <Grid item sm={12} xs={12} style={{ marginBottom: 15,
+              marginTop: props.item.post_picture === "" ? 20 : 0 }}>
+                <p style={{ fontSize: 16 }}>{props.item.post_text}</p>
               </Grid>
 
               {props.item.post_picture === "" ? null : (
@@ -496,24 +529,26 @@ const PostCard = (props) => {
                         className={classes.commentImgProfile}
                       />
                     </Grid>
-                    <Grid item style={{ marginLeft: 10, marginTop: 15 }}>
-                      <p style={{ fontSize: 18 }}>{item.comment_username}</p>
+                    <Grid item style={{ paddingLeft: 10, marginTop: 10 }}>
+                      <p style={{ fontSize: 16, fontWeight: "bold" }} className={classes.margin1}>{item.comment_username}</p>
                     </Grid>
                     <Grid
                       item
                       sm={12}
                       xs={12}
                       style={{
-                        marginTop: -20,
+                        marginTop: -30,
                         paddingLeft: 50,
                         paddingRight: 50,
                       }}
                     >
                       <p
                         style={{
-                          fontSize: 16,
+                          fontSize: 14,
                           paddingLeft: 10,
                           paddingRight: 20,
+                          paddingBottom: 5,
+                          marginTop: 5
                         }}
                       >
                         {item.comment_text}
@@ -527,14 +562,14 @@ const PostCard = (props) => {
 
               {/* my comment */}
               <Grid container style={{ marginTop: 10 }}>
-                <Grid item xs={3}>
+                <Grid item sm={1} xs={2}>
                   <img
                     src={profilePicture === "" ? MyImage.img_2 : profilePicture}
                     alt=""
                     className={classes.commentImgProfile}
                   />
                 </Grid>
-                <Grid sm={8} xs={8} item style={{ marginLeft: 10, marginTop: 10 }}>
+                <Grid sm={9} xs={9} item style={{ marginTop: 10, marginLeft: 5 }}>
                   <TextField
                     variant="outlined"
                     placeholder="Write a comment"
@@ -544,7 +579,7 @@ const PostCard = (props) => {
                     value={commentText}
                   />
                 </Grid>
-                <Grid sm={2} item style={{ marginLeft: 10, marginTop: 10 }}>
+                <Grid sm={1} xs={12} item style={{ marginTop: 10 }}>
                   <Button
                     variant="contained"
                     color="primary"
